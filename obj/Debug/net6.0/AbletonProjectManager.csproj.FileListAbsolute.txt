@@ -1,0 +1,6 @@
+C:\Users\night\OneDrive\code\app_playground\AbletonProjectManager\obj\Debug\net6.0\AbletonProjectManager.csproj.AssemblyReference.cache
+C:\Users\night\OneDrive\code\app_playground\AbletonProjectManager\obj\Debug\net6.0\AbletonProjectManager.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\night\OneDrive\code\app_playground\AbletonProjectManager\obj\Debug\net6.0\AbletonProjectManager.AssemblyInfoInputs.cache
+C:\Users\night\OneDrive\code\app_playground\AbletonProjectManager\obj\Debug\net6.0\AbletonProjectManager.AssemblyInfo.cs
+C:\Users\night\OneDrive\code\app_playground\AbletonProjectManager\obj\Debug\net6.0\AbletonProjectManager.csproj.CoreCompileInputs.cache
+C:\Users\night\OneDrive\code\app_playground\AbletonProjectManager\obj\Debug\net6.0\refint\AbletonProjectManager.dll
