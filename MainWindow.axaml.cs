@@ -27,8 +27,13 @@ namespace AbletonProjectManager
             this.AttachDevTools();
 #endif
             
+            _selectFolderButton = this.FindControl<Button>("SelectFolderButton");
+            _projectsGrid = this.FindControl<DataGrid>("ProjectsGrid");
+            _statusText = this.FindControl<TextBlock>("StatusText");
+            _dragDropOverlay = this.FindControl<Grid>("DragDropOverlay");
+            
             _projects = new ObservableCollection<AbletonProject>();
-            _projectsGrid.Items = _projects;
+            _projectsGrid.ItemsSource = _projects;
             
             // Set up drag and drop
             AddHandler(DragDrop.DragOverEvent, DragOver);
@@ -43,11 +48,6 @@ namespace AbletonProjectManager
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            
-            _selectFolderButton = this.FindControl<Button>("SelectFolderButton");
-            _projectsGrid = this.FindControl<DataGrid>("ProjectsGrid");
-            _statusText = this.FindControl<TextBlock>("StatusText");
-            _dragDropOverlay = this.FindControl<Grid>("DragDropOverlay");
         }
         
         private async void SelectFolder(object sender, RoutedEventArgs e)

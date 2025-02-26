@@ -1,9 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Data.Core.Plugins;
 using Avalonia.Threading;
 using System;
 using System.IO;
 using System.Text;
+using Avalonia.Markup.Xaml;
 
 namespace AbletonProjectManager
 {
@@ -38,13 +40,14 @@ namespace AbletonProjectManager
     {
         public override void Initialize()
         {
-            Styles.Add(new Avalonia.Themes.Default.DefaultTheme());
-            Styles.Add(new Avalonia.Themes.Default.DefaultTheme());
-            base.Initialize();
+            AvaloniaXamlLoader.Load(this);
         }
 
         public override void OnFrameworkInitializationCompleted()
         {
+            // Remove data validation to improve performance when not needed
+            BindingPlugins.DataValidators.RemoveAt(0);
+            
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow();
