@@ -26,7 +26,7 @@ namespace AbletonProjectManager
 
         private MessageBoxResult _result = MessageBoxResult.Cancel;
 
-        private MessageBox()
+        public MessageBox()
         {
             AvaloniaXamlLoader.Load(this);
             this.AttachDevTools();
