@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AbletonProjectManager")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92197930048ba665a47dba3859d18cb953f50ed3")]
 [assembly: System.Reflection.AssemblyProductAttribute("AbletonProjectManager")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AbletonProjectManager")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
