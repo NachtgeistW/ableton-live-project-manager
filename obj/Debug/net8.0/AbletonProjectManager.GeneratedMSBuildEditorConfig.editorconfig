@@ -17,6 +17,9 @@ build_property.ProjectDir = C:\Users\night\OneDrive\code\app_playground\AbletonP
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 
+[C:/Users/night/OneDrive/code/app_playground/AbletonProjectManager/App.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Users/night/OneDrive/code/app_playground/AbletonProjectManager/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
