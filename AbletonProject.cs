@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -22,60 +23,82 @@ namespace AbletonProjectManager
         /// </summary>
         public static async Task<AbletonProject> LoadProject(string projectPath)
         {
-            var project = new AbletonProject
+            try
             {
-                ProjectFolder = projectPath,
-                Title = Path.GetFileName(projectPath)
-            };
-            
-            // Look for .als file
-            var alsFiles = Directory.GetFiles(projectPath, "*.als");
-            if (alsFiles.Length == 0)
-            {
-                throw new FileNotFoundException("No Ableton Live Set (.als) files found in the project folder.");
-            }
-            
-            var alsFilePath = alsFiles[0]; // Use first .als file found
-            var fileInfo = new FileInfo(alsFilePath);
-            project.LastModified = fileInfo.LastWriteTime;
-
-            var compressedData = await File.ReadAllBytesAsync(alsFilePath);
-            
-            var parser = new AbletonParser();
-            var (xmlData, jsonData) = await parser.UnpackAndCreateJson(compressedData);
-            
-            // Extract BPM
-            var tempo = xmlData.Descendants("Tempo").FirstOrDefault();
-            if (tempo != null)
-            {
-                var bpmElement = tempo.Element("Manual");
-                if (bpmElement != null && double.TryParse(bpmElement.Value, out double bpmValue))
+                var project = new AbletonProject
                 {
-                    project.Bpm = bpmValue;
-                }
-            }
-            
-            // Extract Scale
-            var scaleInfo = xmlData.Descendants("ScaleInformation").FirstOrDefault();
-            if (scaleInfo != null)
-            {
-                var rootElement = scaleInfo.Element("Root");
-                var nameElement = scaleInfo.Element("Name");
+                    ProjectFolder = projectPath,
+                    Title = Path.GetFileName(projectPath)
+                };
                 
-                if (rootElement != null && nameElement != null)
+                // Ensure proper encoding for console output
+                try
                 {
-                    int root = int.Parse(rootElement.Value);
-                    string scaleName = nameElement.Value;
-                    
-                    // Convert root number to note name
-                    string[] noteNames = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-                    string rootNote = noteNames[root % 12];
-                    
-                    project.Scale = $"{rootNote} {scaleName}";
+                    Console.OutputEncoding = Encoding.UTF8;
+                    Console.WriteLine($"Loading project from: {projectPath}");
                 }
+                catch (IOException)
+                {
+                    // Running without a console, which is normal for GUI apps
+                }
+                
+                // Look for .als file
+                var alsFiles = Directory.GetFiles(projectPath, "*.als");
+                if (alsFiles.Length == 0)
+                {
+                    throw new FileNotFoundException("No Ableton Live Set (.als) files found in the project folder.");
+                }
+                
+                var alsFilePath = alsFiles[0]; // Use first .als file found
+                Console.WriteLine($"Found .als file: {alsFilePath}");
+                
+                var fileInfo = new FileInfo(alsFilePath);
+                project.LastModified = fileInfo.LastWriteTime;
+
+                // Read file with proper encoding handling
+                var compressedData = await File.ReadAllBytesAsync(alsFilePath);
+                
+                var parser = new AbletonParser();
+                var (xmlData, jsonData) = await parser.UnpackAndCreateJson(compressedData);
+                
+                // Extract BPM
+                var tempo = xmlData.Descendants("Tempo").FirstOrDefault();
+                if (tempo != null)
+                {
+                    var bpmElement = tempo.Element("Manual");
+                    if (bpmElement != null && double.TryParse(bpmElement.Value, out double bpmValue))
+                    {
+                        project.Bpm = bpmValue;
+                    }
+                }
+                
+                // Extract Scale
+                var scaleInfo = xmlData.Descendants("ScaleInformation").FirstOrDefault();
+                if (scaleInfo != null)
+                {
+                    var rootElement = scaleInfo.Element("Root");
+                    var nameElement = scaleInfo.Element("Name");
+                    
+                    if (rootElement != null && nameElement != null)
+                    {
+                        int root = int.Parse(rootElement.Value);
+                        string scaleName = nameElement.Value;
+                        
+                        // Convert root number to note name
+                        string[] noteNames = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+                        string rootNote = noteNames[root % 12];
+                        
+                        project.Scale = $"{rootNote} {scaleName}";
+                    }
+                }
+                
+                return project;
             }
-            
-            return project;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading project from {projectPath}: {ex.Message}");
+                throw new ApplicationException($"Error loading project from {projectPath}: {ex.Message}", ex);
+            }
         }
         
         /// <summary>

@@ -20,24 +20,43 @@ namespace AbletonProjectManager
         /// </summary>
         public async Task<(XDocument XmlData, JObject JsonData)> UnpackAndCreateJson(byte[] compressedData)
         {
-            // Decompress the gzipped data
-            string decompressedXml;
-            using (var compressedStream = new MemoryStream(compressedData))
-            using (var decompressStream = new GZipStream(compressedStream, CompressionMode.Decompress))
-            using (var resultStream = new MemoryStream())
+            try
             {
-                await decompressStream.CopyToAsync(resultStream);
-                decompressedXml = Encoding.UTF8.GetString(resultStream.ToArray());
-            }
+                // Decompress the gzipped data
+                string decompressedXml;
+                using (var compressedStream = new MemoryStream(compressedData))
+                using (var decompressStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+                using (var resultStream = new MemoryStream())
+                {
+                    await decompressStream.CopyToAsync(resultStream);
+                    decompressedXml = Encoding.UTF8.GetString(resultStream.ToArray());
+                }
 
-            // Parse as XML
-            var xmlDoc = XDocument.Parse(decompressedXml);
-            
-            // Convert to JSON
-            var jsonText = JsonConvert.SerializeXNode(xmlDoc, Formatting.None, true);
-            var jsonData = JObject.Parse(jsonText);
-            
-            return (xmlDoc, jsonData);
+                // Parse as XML
+                var xmlDoc = XDocument.Parse(decompressedXml);
+                
+                // Convert to JSON with specific settings to handle encoding properly
+                var jsonSettings = new JsonSerializerSettings
+                {
+                    Formatting = Formatting.None,
+                    StringEscapeHandling = StringEscapeHandling.EscapeNonAscii
+                };
+                
+                var jsonText = JsonConvert.SerializeXNode(xmlDoc, Newtonsoft.Json.Formatting.None, true);
+                
+                // Parse JSON with specific reader settings
+                using (var stringReader = new StringReader(jsonText))
+                using (var jsonReader = new JsonTextReader(stringReader))
+                {
+                    var jsonData = JObject.Load(jsonReader);
+                    return (xmlDoc, jsonData);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error processing Ableton project: {ex.Message}");
+                throw new ApplicationException($"Failed to process Ableton project: {ex.Message}", ex);
+            }
         }
 
         /// <summary>

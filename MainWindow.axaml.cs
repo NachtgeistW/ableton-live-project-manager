@@ -7,6 +7,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AbletonProjectManager
@@ -91,7 +92,24 @@ namespace AbletonProjectManager
         {
             try
             {
+                // Ensure proper encoding for path handling
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                try
+                {
+                    Console.OutputEncoding = Encoding.UTF8;
+                }
+                catch (IOException)
+                {
+                    // Running without a console, which is normal for GUI apps
+                }
+                
                 _statusText.Text = $"Loading projects from {folderPath}...";
+                
+                // Check if the directory exists and is accessible
+                if (!Directory.Exists(folderPath))
+                {
+                    throw new DirectoryNotFoundException($"Directory not found: {folderPath}");
+                }
                 
                 var loadedProjects = await AbletonProject.LoadProjects(folderPath);
                 
@@ -108,6 +126,16 @@ namespace AbletonProjectManager
             catch (Exception ex)
             {
                 _statusText.Text = $"Error: {ex.Message}";
+                
+                // Get the full exception details for debugging
+                string errorDetails = $"Error loading projects: {ex.Message}\n\nStack Trace: {ex.StackTrace}";
+                if (ex.InnerException != null)
+                {
+                    errorDetails += $"\n\nInner Exception: {ex.InnerException.Message}\n{ex.InnerException.StackTrace}";
+                }
+                
+                Console.WriteLine(errorDetails);
+                
                 await MessageBox.Show(this, $"Error loading projects: {ex.Message}", "Error", 
                     MessageBox.MessageBoxButtons.Ok);
             }
