@@ -21,7 +21,7 @@ namespace AbletonProjectManager
         /// <summary>
         /// Loads an Ableton project from a folder path
         /// </summary>
-        public static async Task<AbletonProject> LoadProject(string projectPath)
+        private static async Task<AbletonProject> LoadProject(string projectPath)
         {
             try
             {
@@ -60,33 +60,30 @@ namespace AbletonProjectManager
                 
                 var parser = new AbletonParser();
                 var (xmlData, jsonData) = await parser.UnpackAndCreateJson(compressedData);
-                
+
                 // Extract BPM
-                var tempo = xmlData.Descendants("Tempo").FirstOrDefault();
-                if (tempo != null)
+                var tempo = jsonData["LiveSet"]?["MainTrack"]?["DeviceChain"]?["Mixer"]?["Tempo"];
+                var bpmElement = tempo?["Manual"];
+                if (bpmElement != null && double.TryParse(bpmElement["@Value"]?.ToString(), out var bpmValue))
                 {
-                    var bpmElement = tempo.Element("Manual");
-                    if (bpmElement != null && double.TryParse(bpmElement.Value, out double bpmValue))
-                    {
-                        project.Bpm = bpmValue;
-                    }
+                    project.Bpm = bpmValue;
                 }
-                
+
                 // Extract Scale
-                var scaleInfo = xmlData.Descendants("ScaleInformation").FirstOrDefault();
+                var scaleInfo = jsonData["LiveSet"]?["ScaleInformation"];
                 if (scaleInfo != null)
                 {
-                    var rootElement = scaleInfo.Element("Root");
-                    var nameElement = scaleInfo.Element("Name");
-                    
+                    var rootElement = scaleInfo["Root"]?["@Value"];
+                    var nameElement = scaleInfo["Name"]?["@Value"];
+
+                    string[] noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
                     if (rootElement != null && nameElement != null)
                     {
-                        int root = int.Parse(rootElement.Value);
-                        string scaleName = nameElement.Value;
+                        var root = int.Parse(rootElement.ToString());
+                        var scaleName = nameElement.ToString();
                         
                         // Convert root number to note name
-                        string[] noteNames = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-                        string rootNote = noteNames[root % 12];
+                        var rootNote = noteNames[root % 12];
                         
                         project.Scale = $"{rootNote} {scaleName}";
                     }
