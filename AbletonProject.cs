@@ -77,13 +77,23 @@ namespace AbletonProjectManager
                     var nameElement = scaleInfo["Name"]?["@Value"];
 
                     string[] noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+                    string[] scaleNames =
+                    [
+                        "Major", "Minor", "Dorian", "Mixolydian", "Lydian", "Phrygian", "Locrian", "Whole Tone",
+                        "Half-whole Dim.", "Whole-half Dim.", "Minor Blues", "Minor Pentatonic", "Major Pentatonic",
+                        "Harmonic Minor", "Harmonic Major", "Dorian #4", "Phrygian Dominant", "Melodic Minor",
+                        "Lydian Augmented", "Lydian Dominant", "Super Locrian", "8-Tone Spanish", "Bhairav",
+                        "Hungarian Minor", "Hirajoshi", "In-Sen", "Iwato", "Kumoi", "Pelog Selisir", "Pelog Tembung",
+                        "Messiaen 3", "Messiaen 4", "Messiaen 5", "Messiaen 6", "Messiaen 7"
+                    ];
                     if (rootElement != null && nameElement != null)
                     {
                         var root = int.Parse(rootElement.ToString());
-                        var scaleName = nameElement.ToString();
+                        var scaleNameIndex = nameElement.ToString();
                         
                         // Convert root number to note name
                         var rootNote = noteNames[root % 12];
+                        var scaleName = scaleNames[int.Parse(scaleNameIndex)];
                         
                         project.Scale = $"{rootNote} {scaleName}";
                     }
