@@ -35,14 +35,10 @@ namespace AbletonProjectManager
                 // Parse as XML
                 var xmlDoc = XDocument.Parse(decompressedXml);
                 
-                // Convert to JSON with specific settings to handle encoding properly
-                var jsonSettings = new JsonSerializerSettings
-                {
-                    Formatting = Formatting.None,
-                    StringEscapeHandling = StringEscapeHandling.EscapeNonAscii
-                };
-                
-                var jsonText = JsonConvert.SerializeXNode(xmlDoc, Newtonsoft.Json.Formatting.None, true);
+                // Remove the XML declaration to avoid JSON parsing issues
+                xmlDoc.Declaration = null;
+
+                var jsonText = JsonConvert.SerializeXNode(xmlDoc, Formatting.None, true);
                 
                 // Parse JSON with specific reader settings
                 using (var stringReader = new StringReader(jsonText))
