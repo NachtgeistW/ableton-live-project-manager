@@ -1,11 +1,7 @@
 ﻿using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
-using Avalonia.Threading;
 using System;
 using System.IO;
 using System.Text;
-using Avalonia.Markup.Xaml;
 
 namespace AbletonProjectManager
 {

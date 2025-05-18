@@ -2,27 +2,25 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using System;
 
-namespace AbletonProjectManager
+namespace AbletonProjectManager;
+
+public class App : Application
 {
-    public class App : Application
+    public override void Initialize()
     {
-        public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        AvaloniaXamlLoader.Load(this);
+    }
 
-        public override void OnFrameworkInitializationCompleted()
-        {
-            // Remove data validation to improve performance when not needed
-            BindingPlugins.DataValidators.RemoveAt(0);
+    public override void OnFrameworkInitializationCompleted()
+    {
+        // Remove data validation to improve performance when not needed
+        BindingPlugins.DataValidators.RemoveAt(0);
             
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                desktop.MainWindow = new MainWindow();
-            }
-            base.OnFrameworkInitializationCompleted();
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.MainWindow = new MainWindow();
         }
+        base.OnFrameworkInitializationCompleted();
     }
 }
