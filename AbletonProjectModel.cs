@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace AbletonProjectManager
 {
-    public class AbletonProject
+    public class AbletonProjectModel
     {
         public string Title { get; set; }
         public double Bpm { get; set; }
@@ -21,11 +21,11 @@ namespace AbletonProjectManager
         /// <summary>
         /// Loads an Ableton project from a folder path
         /// </summary>
-        private static async Task<AbletonProject> LoadProject(string projectPath)
+        private static async Task<AbletonProjectModel> LoadProject(string projectPath)
         {
             try
             {
-                var project = new AbletonProject
+                var project = new AbletonProjectModel
                 {
                     ProjectFolder = projectPath,
                     Title = Path.GetFileName(projectPath)
@@ -111,9 +111,9 @@ namespace AbletonProjectManager
         /// <summary>
         /// Loads all Ableton projects from a root folder
         /// </summary>
-        public static async Task<List<AbletonProject>> LoadProjects(string rootFolder)
+        public static async Task<List<AbletonProjectModel>> LoadProjects(string rootFolder)
         {
-            var projects = new List<AbletonProject>();
+            var projects = new List<AbletonProjectModel>();
             
             // Check if the rootFolder itself is a project
             if (Directory.GetFiles(rootFolder, "*.als").Length > 0)

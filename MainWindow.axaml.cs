@@ -18,7 +18,7 @@ namespace AbletonProjectManager
         private DataGrid _projectsGrid;
         private TextBlock _statusText;
         private Grid _dragDropOverlay;
-        private ObservableCollection<AbletonProject> _projects;
+        private ObservableCollection<AbletonProjectModel> _projects;
         
         public MainWindow()
         {
@@ -32,7 +32,7 @@ namespace AbletonProjectManager
             _statusText = this.FindControl<TextBlock>("StatusText");
             _dragDropOverlay = this.FindControl<Grid>("DragDropOverlay");
             
-            _projects = new ObservableCollection<AbletonProject>();
+            _projects = new ObservableCollection<AbletonProjectModel>();
             _projectsGrid.ItemsSource = _projects;
             
             // Set up drag and drop
@@ -111,7 +111,7 @@ namespace AbletonProjectManager
                     throw new DirectoryNotFoundException($"Directory not found: {folderPath}");
                 }
                 
-                var loadedProjects = await AbletonProject.LoadProjects(folderPath);
+                var loadedProjects = await AbletonProjectModel.LoadProjects(folderPath);
                 
                 foreach (var project in loadedProjects)
                 {
