@@ -65,7 +65,7 @@
         </DataGrid>
         
         <!-- Status bar -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,5" Background="#F0F0F0">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,5">
             <TextBlock x:Name="StatusText" Text="Ready" VerticalAlignment="Center" Padding="5"/>
         </StackPanel>
     </Grid>
