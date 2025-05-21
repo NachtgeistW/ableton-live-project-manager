@@ -52,6 +52,8 @@
                  IsReadOnly="True"
                  AutoGenerateColumns="False"
                  GridLinesVisibility="All"
+                 CanUserReorderColumns="True"
+                 CanUserResizeColumns="True"
                  VerticalGridLinesBrush="#E0E0E0"
                  HorizontalGridLinesBrush="#E0E0E0"
                  Margin="10">
