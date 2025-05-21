@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace AbletonProjectManager;
 
 public class AbletonProjectModel
 {
+    [JsonProperty("title")]
     public string Title { get; set; }
+    
+    [JsonProperty("bpm")]
     public double Bpm { get; set; }
+    
+    [JsonProperty("scale")]
     public string Scale { get; set; }
+    
+    [JsonProperty("projectFolder")]
     public string ProjectFolder { get; set; }
+    
+    [JsonProperty("lastModified")]
     public DateTime LastModified { get; set; }
         
     // Additional project properties can be added here
